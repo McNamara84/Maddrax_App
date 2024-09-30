@@ -1,13 +1,14 @@
 import streamlit as st
 import database as db
 
+
 def register():
     st.header("Register")
     new_username = st.text_input("Choose a username")
     new_password = st.text_input("Choose a password", type="password")
     confirm_password = st.text_input("Confirm password", type="password")
-    
-    if st.button("Register"):
+
+    if st.button("Register", key="register_button"):  # Added a unique key here
         if new_password != confirm_password:
             st.error("Passwords do not match")
         elif len(new_password) < 6:

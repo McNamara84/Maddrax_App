@@ -2,7 +2,15 @@ import streamlit as st
 import pandas as pd
 from streamlit_option_menu import option_menu
 import database as db
-import login, register, members, chat, rewards, kasse, statistik
+import login
+import register
+import members
+import chat
+import rewards
+import kasse
+import statistik
+
+### App starten streamlit run app.py ###
 
 # Initialize session state
 if 'user' not in st.session_state:
@@ -16,35 +24,42 @@ st.set_page_config(
 )
 
 # Sidebar navigation
+
+
 def sidebar():
     with st.sidebar:
         if st.session_state.user:
             st.write(f"Logged in as: {st.session_state.user['username']}")
             st.write(f"Role: {st.session_state.user['role']}")
             st.write(f"Baxx: {st.session_state.user['baxx']}")
-        
-        choose = option_menu("MADDRAX Fanclub", 
-                            ["Home", "Chat", "Rewards", "Kasse", "Statistik", "Members", "Logout"],
-                            icons=['house', 'chat-dots', 'trophy', 'piggy-bank', 'graph-up', 'people', 'box-arrow-right'],
-                            menu_icon="app-indicator", default_index=0,
-                            styles={
-                                "container": {"padding": "5!important", "background-color": "#fafafa"},
-                                "icon": {"color": "orange", "font-size": "25px"}, 
-                                "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-                                "nav-link-selected": {"background-color": "#02ab21"},
-                            }
-                            )
+
+        choose = option_menu("MADDRAX Fanclub",
+                             ["Home", "Chat", "Rewards", "Kasse",
+                                 "Statistik", "Members", "Logout"],
+                             icons=['house', 'chat-dots', 'trophy', 'piggy-bank',
+                                    'graph-up', 'people', 'box-arrow-right'],
+                             menu_icon="app-indicator", default_index=0,
+                             styles={
+                                 "container": {"padding": "5!important", "background-color": "#fafafa"},
+                                 "icon": {"color": "orange", "font-size": "25px"},
+                                 "nav-link": {"font-size": "16px", "text-align": "left", "margin": "0px", "--hover-color": "#eee"},
+                                 "nav-link-selected": {"background-color": "#02ab21"},
+                             }
+                             )
         return choose
 
 # Main app logic
+
+
 def main():
     choice = sidebar()
 
     if not st.session_state.user:
         login.login()
-        st.sidebar.button("Register", on_click=lambda: setattr(st.session_state, 'page', 'register'))
-        if st.session_state.get('page') == 'register':
-            register.register()
+    if st.sidebar.button("Go to Register", key="goto_register_button"):
+        st.session_state.page = 'register'
+    if st.session_state.get('page') == 'register':
+        register.register()
     else:
         if choice == "Home":
             st.title("Welcome to MADDRAX Fanclub")
@@ -62,6 +77,7 @@ def main():
         elif choice == "Logout":
             st.session_state.user = None
             st.experimental_rerun()
+
 
 if __name__ == "__main__":
     main()

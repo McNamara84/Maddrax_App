@@ -1,8 +1,10 @@
-# :earth_americas: GDP dashboard template
+# :earth_americas: Maddrax App
 
-A simple Streamlit app showing the GDP of different countries in the world.
+Eine App für alle Mitglieder des Offiziellen MADDRAX Fanclub e. V.!
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://gdp-dashboard-template.streamlit.app/)
+### Setup
+1. Kopieren Sie `.env.example` zu `.env`
+2. Füllen Sie die Werte in `.env` mit Ihren tatsächlichen Datenbankzugangsdaten aus
 
 ### How to run it on your own machine
 
@@ -15,5 +17,5 @@ A simple Streamlit app showing the GDP of different countries in the world.
 2. Run the app
 
    ```
-   $ streamlit run streamlit_app.py
+   $ streamlit run app.py
    ```
