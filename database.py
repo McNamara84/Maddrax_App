@@ -58,6 +58,13 @@ def init_db():
                               baxx_reward INT NOT NULL,
                               FOREIGN KEY (assigned_to) REFERENCES users (id))''')
 
+            # Create news table
+            cursor.execute('''CREATE TABLE IF NOT EXISTS news
+                             (id INT AUTO_INCREMENT PRIMARY KEY,
+                              title VARCHAR(255) NOT NULL,
+                              content TEXT NOT NULL,
+                              date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+
             conn.commit()
             print(
                 "Alle Tabellen wurden erfolgreich erstellt oder waren bereits vorhanden.")
@@ -70,7 +77,7 @@ def init_db():
         print("Keine Verbindung zur Datenbank möglich. Tabellen konnten nicht erstellt werden.")
 
 
-def add_user(username, password, role='guest'):
+def add_user(username, password, role='Gast'):
     conn = get_db_connection()
     if conn is not None:
         try:
@@ -111,6 +118,54 @@ def test_connection():
         conn.close()
     else:
         print("Verbindung zur Datenbank fehlgeschlagen!")
+
+
+def add_news(title, content):
+    conn = get_db_connection()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO news (title, content) VALUES (%s, %s)", (title, content))
+            conn.commit()
+        except Error as e:
+            print(f"Error: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
+
+def get_latest_news():
+    conn = get_db_connection()
+    if conn is not None:
+        try:
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM news ORDER BY date DESC LIMIT 1")
+            news = cursor.fetchone()
+            return news
+        except Error as e:
+            print(f"Error: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    return None
+
+
+def user_exists(username):
+    conn = get_db_connection()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT * FROM users WHERE username = %s", (username,))
+            user = cursor.fetchone()
+            return user is not None
+        except Error as e:
+            print(f"Error: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    return False
 
 
 # Fügen Sie diese Zeile am Ende der Datei hinzu

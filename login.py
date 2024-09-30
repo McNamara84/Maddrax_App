@@ -4,14 +4,14 @@ import database as db
 
 def login():
     st.header("Login")
-    username = st.text_input("Username")
+    username = st.text_input("Nutzername")
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
         user = db.get_user(username, password)
         if user:
             st.session_state.user = user
-            st.success("Logged in successfully!")
+            st.success("Login erfolgreich!")
             st.rerun()  # Hier wurde die Änderung vorgenommen
         else:
-            st.error("Invalid username or password")
+            st.error("Fehlerhafter Nutzername oder falsches Passwort!")

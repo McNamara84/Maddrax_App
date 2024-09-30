@@ -9,6 +9,7 @@ import chat
 import rewards
 import kasse
 import statistik
+import dashboard
 
 ### App starten streamlit run app.py ###
 
@@ -34,8 +35,8 @@ def sidebar():
             st.write(f"Baxx: {st.session_state.user['baxx']}")
 
         choose = option_menu("MADDRAX Fanclub",
-                             ["Home", "Chat", "Rewards", "Kasse",
-                                 "Statistik", "Members", "Logout"],
+                             ["Home", "Chat", "Belohnungen", "Kasse",
+                                 "Statistik", "Mitglieder", "Logout"],
                              icons=['house', 'chat-dots', 'trophy', 'piggy-bank',
                                     'graph-up', 'people', 'box-arrow-right'],
                              menu_icon="app-indicator", default_index=0,
@@ -56,23 +57,22 @@ def main():
 
     if not st.session_state.user:
         login.login()
-    if st.sidebar.button("Go to Register", key="goto_register_button"):
-        st.session_state.page = 'register'
-    if st.session_state.get('page') == 'register':
-        register.register()
+        st.sidebar.button("Register", on_click=lambda: setattr(
+            st.session_state, 'page', 'register'))
+        if st.session_state.get('page') == 'register':
+            register.register()
     else:
         if choice == "Home":
-            st.title("Welcome to MADDRAX Fanclub")
-            st.write("This is the official web app for MADDRAX Fanclub members.")
+            dashboard.show_dashboard()
         elif choice == "Chat":
             chat.chat_page()
-        elif choice == "Rewards":
+        elif choice == "Belohnungen":
             rewards.rewards_page()
         elif choice == "Kasse":
             kasse.kasse_page()
         elif choice == "Statistik":
             statistik.statistik_page()
-        elif choice == "Members":
+        elif choice == "Mitglieder":
             members.members_page()
         elif choice == "Logout":
             st.session_state.user = None
